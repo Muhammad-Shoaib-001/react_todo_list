@@ -1,23 +1,19 @@
-# Use an official Node runtime as a parent image
 FROM node:14.17.0
 
-# Set the working directory in the container
+# Create a directory for the application
 WORKDIR /app
 
-# Copy cached dependencies
-COPY package*.json ./
-
 # Install dependencies
+COPY package*.json ./
 RUN npm install --quiet
 
-# Copy the rest of the application code to the working directory
+# Copy the rest of the application code
 COPY . .
 
-# Build your React app (if needed)
-# RUN npm run build
+# Set permissions explicitly (if needed)
+RUN chown -R node:node /app
 
-# Expose the port your app runs on (if needed)
-# EXPOSE 3000
+# Switch to non-root user
+USER node
 
-# Command to run your app using CMD which runs when the container starts
-# CMD ["npm", "start"]
+CMD ["npm", "start"]
